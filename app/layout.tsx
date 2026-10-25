@@ -19,7 +19,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#061110",
+  themeColor: "#FFFFFF",
 };
 
 export const metadata: Metadata = {
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col overflow-x-hidden bg-[#061110] text-[#FAF7F0]">{children}</body>
+      <body className="min-h-full flex flex-col overflow-x-hidden bg-white text-[#090D15]">{children}</body>
     </html>
   );
 }
