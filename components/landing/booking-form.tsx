@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FLEET_CARS, POPULAR_LOCATIONS, CHAUFFEUR_DAILY_RATE } from "@/lib/fleet";
@@ -28,35 +28,44 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ selectedCarId, onCarChange }: BookingFormProps) {
-  const [todayMinDate] = useState<string>(() => {
-    return new Date().toISOString().split("T")[0];
+  const [todayMinDate, setTodayMinDate] = useState<string>("");
+
+  const [formData, setFormData] = useState<BookingFormData>({
+    fullName: "",
+    email: "",
+    phone: "",
+    licenseNumber: "",
+    carId: selectedCarId || FLEET_CARS[0].id,
+    pickupDate: "",
+    pickupTime: "10:00",
+    dropoffDate: "",
+    dropoffTime: "18:00",
+    pickupLocation: POPULAR_LOCATIONS[0],
+    dropoffLocation: POPULAR_LOCATIONS[0],
+    rentalType: "self-drive",
+    notes: "",
   });
 
-  const [formData, setFormData] = useState<BookingFormData>(() => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const threeDaysLater = new Date(tomorrow);
-    threeDaysLater.setDate(threeDaysLater.getDate() + 3);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const threeDaysLater = new Date(tomorrow);
+      threeDaysLater.setDate(threeDaysLater.getDate() + 3);
 
-    const format = (d: Date) => d.toISOString().split("T")[0];
+      const format = (d: Date) => d.toISOString().split("T")[0];
 
-    return {
-      fullName: "",
-      email: "",
-      phone: "",
-      licenseNumber: "",
-      carId: selectedCarId || FLEET_CARS[0].id,
-      pickupDate: format(tomorrow),
-      pickupTime: "10:00",
-      dropoffDate: format(threeDaysLater),
-      dropoffTime: "18:00",
-      pickupLocation: POPULAR_LOCATIONS[0],
-      dropoffLocation: POPULAR_LOCATIONS[0],
-      rentalType: "self-drive",
-      notes: "",
-    };
-  });
+      setTodayMinDate(format(today));
+      setFormData((prev) => ({
+        ...prev,
+        pickupDate: prev.pickupDate || format(tomorrow),
+        dropoffDate: prev.dropoffDate || format(threeDaysLater),
+      }));
+    }, 0);
+
+    return () => clearTimeout(t);
+  }, []);
 
   // Synchronously sync prop change without triggering cascading effect renders
   const [prevCarId, setPrevCarId] = useState(selectedCarId);

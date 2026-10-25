@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FLEET_CARS, POPULAR_LOCATIONS } from "@/lib/fleet";
 import { formatINR } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,14 @@ interface HeroProps {
 export function Hero({ onSelectCarAndScroll }: HeroProps) {
   const [selectedCarId, setSelectedCarId] = useState<string>(FLEET_CARS[0].id);
   const [selectedLocation, setSelectedLocation] = useState<string>(POPULAR_LOCATIONS[0]);
-  const [selectedDate, setSelectedDate] = useState<string>(() => {
-    return new Date().toISOString().split("T")[0];
-  });
+  const [selectedDate, setSelectedDate] = useState<string>("");
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setSelectedDate(new Date().toISOString().split("T")[0]);
+    }, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleQuickBook = () => {
     onSelectCarAndScroll(selectedCarId);
