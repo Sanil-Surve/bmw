@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Booking, BookingFormData } from "@/types/booking";
-import { FLEET_CARS } from "@/lib/fleet";
+import { FLEET_CARS, CHAUFFEUR_DAILY_RATE } from "@/lib/fleet";
 import {
   getLocalBookings,
   addLocalBooking,
   updateLocalBookingStatus,
   getGoogleScriptUrl,
 } from "@/lib/storage";
+import { isValidIndianMobile, formatIndianMobile } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,10 +34,14 @@ export async function GET(req: NextRequest) {
         if (response.ok) {
           const data = await response.json();
           if (data && data.success && Array.isArray(data.bookings)) {
-            bookings = data.bookings.map((b: Booking) => ({
-              ...b,
-              phone: b.phone ? String(b.phone).replace(/^'/, "") : "",
-            }));
+            bookings = data.bookings.map((b: Booking) => {
+              const rawPhone = b.phone ? String(b.phone).replace(/^'+/, "").trim() : "";
+              const cleanPhone = rawPhone === "#ERROR!" || rawPhone.startsWith("#") ? "" : rawPhone;
+              return {
+                ...b,
+                phone: cleanPhone,
+              };
+            });
             isGoogleSheetsConnected = true;
           } else {
             googleSheetError = data?.error || "Google Apps Script returned unexpected response structure.";
@@ -85,11 +90,23 @@ export async function POST(req: NextRequest) {
     // Validation
     if (!body.fullName || !body.email || !body.phone || !body.carId) {
       return NextResponse.json(
-        { success: false, error: "Please fill in all required fields (Name, Email, Phone, Car Model)." },
+        { success: false, error: "Please fill in all required fields (Name, Email, Mobile Number, Car Model)." },
         { status: 400 }
       );
     }
 
+    // Indian 10-digit mobile number validation
+    if (!isValidIndianMobile(body.phone)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Please enter a valid 10-digit Indian mobile number (e.g. 98201 54920 or +91 98201 54920).",
+        },
+        { status: 400 }
+      );
+    }
+
+    const formattedPhone = formatIndianMobile(body.phone);
     const selectedCar = FLEET_CARS.find((c) => c.id === body.carId) || FLEET_CARS[0];
 
     // Calculate duration in days
@@ -98,7 +115,7 @@ export async function POST(req: NextRequest) {
     const diffTime = Math.max(dropoff.getTime() - pickup.getTime(), 1000 * 60 * 60 * 24);
     const calculatedDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
 
-    const chauffeurSurcharge = body.rentalType === "chauffeur" ? 120 * calculatedDays : 0;
+    const chauffeurSurcharge = body.rentalType === "chauffeur" ? CHAUFFEUR_DAILY_RATE * calculatedDays : 0;
     const totalPrice = selectedCar.pricePerDay * calculatedDays + chauffeurSurcharge;
 
     const bookingId = `BMW-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -108,7 +125,7 @@ export async function POST(req: NextRequest) {
       createdAt: new Date().toISOString(),
       fullName: body.fullName.trim(),
       email: body.email.trim().toLowerCase(),
-      phone: body.phone.trim(),
+      phone: formattedPhone,
       licenseNumber: body.licenseNumber?.trim() || "Not Provided",
       carId: selectedCar.id,
       carName: selectedCar.name,
@@ -118,8 +135,8 @@ export async function POST(req: NextRequest) {
       pickupTime: body.pickupTime || "10:00",
       dropoffDate: body.dropoffDate || new Date(Date.now() + 86400000).toISOString().split("T")[0],
       dropoffTime: body.dropoffTime || "18:00",
-      pickupLocation: body.pickupLocation || "International Airport (VIP Terminal Meet & Greet)",
-      dropoffLocation: body.dropoffLocation || body.pickupLocation || "International Airport (VIP Terminal Meet & Greet)",
+      pickupLocation: body.pickupLocation || "Mumbai - CSMI Airport (T2 VIP Meet & Greet)",
+      dropoffLocation: body.dropoffLocation || body.pickupLocation || "Mumbai - CSMI Airport (T2 VIP Meet & Greet)",
       rentalType: body.rentalType || "self-drive",
       days: calculatedDays,
       totalPrice,
@@ -151,7 +168,7 @@ export async function POST(req: NextRequest) {
             action: "create",
             data: {
               ...newBooking,
-              phone: newBooking.phone.startsWith("+") ? `'${newBooking.phone}` : newBooking.phone,
+              phone: newBooking.phone.replace(/^'+/, ""),
             },
           }),
         });
