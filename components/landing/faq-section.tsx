@@ -34,31 +34,31 @@ export function FaqSection() {
   };
 
   return (
-    <section id="faq" className="py-24 relative border-b border-[#FAF7F0]/10 overflow-hidden">
+    <section id="faq" className="py-14 sm:py-20 md:py-24 relative border-b border-[#FAF7F0]/10 overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#14B8A6]/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[600px] h-[250px] sm:h-[350px] bg-[#14B8A6]/10 blur-[120px] sm:blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-[#2DD4BF] mb-2.5">
+      <div className="relative mx-auto max-w-3xl px-3.5 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-14">
+          <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-[#2DD4BF] mb-2 sm:mb-2.5">
             <HelpCircle className="h-3.5 w-3.5" />
             <span>Assistance</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#FAF7F0]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#FAF7F0]">
             Frequently Asked Questions
           </h2>
-          <p className="mt-2 text-[#FAF7F0]/65 text-sm font-light">
+          <p className="mt-1.5 sm:mt-2 text-[#FAF7F0]/65 text-xs sm:text-sm font-light">
             Essential information regarding policies and vehicle handover.
           </p>
         </div>
 
-        <div className="space-y-3.5">
+        <div className="space-y-2.5 sm:space-y-3.5">
           {FAQS.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
                 key={idx}
-                className={`rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
+                className={`rounded-xl sm:rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
                   isOpen
                     ? "border-[#2DD4BF]/40 bg-[#0A201E]/65 shadow-[0_10px_30px_rgba(45,212,191,0.1)]"
                     : "border-[#FAF7F0]/10 bg-[#091A18]/50 hover:border-[#FAF7F0]/25"
@@ -67,9 +67,9 @@ export function FaqSection() {
                 <button
                   type="button"
                   onClick={() => toggle(idx)}
-                  className="flex w-full items-center justify-between p-5 text-left font-medium text-sm sm:text-base text-[#FAF7F0] transition-colors cursor-pointer"
+                  className="flex w-full items-center justify-between p-4 sm:p-5 text-left font-medium text-xs sm:text-base text-[#FAF7F0] transition-colors cursor-pointer gap-3"
                 >
-                  <span>{faq.q}</span>
+                  <span className="leading-snug">{faq.q}</span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 text-[#2DD4BF] transition-transform duration-300 ${
                       isOpen ? "rotate-180" : ""
@@ -77,7 +77,7 @@ export function FaqSection() {
                   />
                 </button>
                 {isOpen && (
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#FAF7F0]/70 border-t border-[#FAF7F0]/10 leading-relaxed font-light">
+                  <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-1 text-xs sm:text-sm text-[#FAF7F0]/70 border-t border-[#FAF7F0]/10 leading-relaxed font-light">
                     {faq.a}
                   </div>
                 )}
