@@ -22,7 +22,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-white text-[#090D15] flex flex-col font-sans selection:bg-teal-600 selection:text-white">
       {/* Sticky Header */}
       <Navbar />
 
