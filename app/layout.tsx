@@ -1,19 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -23,17 +10,17 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Kalash BMW Cars | Premium Luxury Car Rentals",
-  description: "Experience The Ultimate Driving Machine with Kalash BMW Cars. Rent BMW M4, M5 CS, i8 Roadster, X5 M, and 7-Series with white-glove delivery, zero hidden fees, and full insurance included.",
+  title: "BMW 520D Luxury Car On Rent | Mumbai & Navi Mumbai | Kalash BMW",
+  description: "Rent BMW 520D Luxury Sedan in Mumbai & Navi Mumbai. Mini Duty (₹3,500), Short Duty (₹4,500), Half Day (₹6,500), Full Day (₹12,000), Extended Day (₹15,500), T1 & T2 Airport Transfers (₹5,000). Weddings, Corporate, VIP Travel. Call / WhatsApp: 9594781000.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", "font-sans")}
     >
-      <body className="min-h-full flex flex-col overflow-x-hidden bg-white text-[#090D15]">{children}</body>
+      <body className="min-h-full flex flex-col overflow-x-hidden bg-white text-[#090D15] font-sans">{children}</body>
     </html>
   );
 }

@@ -1,10 +1,23 @@
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
+export interface RentalPackage {
+  id: string;
+  name: string;
+  durationText: string;
+  hours: number;
+  distanceKm: number;
+  price: number;
+  badge?: string;
+  popular?: boolean;
+  description: string;
+  category: 'duty' | 'transfer' | 'multiday';
+}
+
 export interface CarModel {
   id: string;
   name: string;
   modelCode: string;
-  category: 'M Performance' | 'Luxury Sedan' | 'Supercar / Hybrid' | 'Performance SUV';
+  category: 'Luxury Sedan' | 'Weddings & VIP' | 'Airport Transfer' | 'Corporate Travel';
   pricePerDay: number;
   image: string;
   specs: {
@@ -29,6 +42,8 @@ export interface Booking {
   licenseNumber: string;
   carId: string;
   carName: string;
+  packageId?: string;
+  packageName?: string;
   carImage?: string;
   carDailyRate: number;
   pickupDate: string;
@@ -51,6 +66,7 @@ export interface BookingFormData {
   phone: string;
   licenseNumber: string;
   carId: string;
+  packageId?: string;
   pickupDate: string;
   pickupTime: string;
   dropoffDate: string;
