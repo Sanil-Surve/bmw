@@ -402,10 +402,10 @@ function doPost(e) {
                 </div>
               </div>
               <span className="font-bold text-xs sm:text-sm tracking-wider text-slate-900 uppercase">
-                KALASH <span className="text-teal-600">BMW</span>
+                KALASH <span className="text-amber-600">BMW</span>
               </span>
-              <Badge className="hidden sm:inline-flex bg-teal-50 border-teal-200 text-teal-700 text-[10px] font-mono uppercase font-semibold">
-                Owner Portal
+              <Badge className="hidden sm:inline-flex bg-amber-50 border-amber-300 text-amber-800 text-[10px] font-mono uppercase font-bold">
+                BMW 520D Owner Portal
               </Badge>
             </div>
           </div>

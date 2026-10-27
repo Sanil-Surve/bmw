@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Booking, BookingFormData } from "@/types/booking";
-import { FLEET_CARS, CHAUFFEUR_DAILY_RATE } from "@/lib/fleet";
+import { FLEET_CARS, CHAUFFEUR_DAILY_RATE, RENTAL_PACKAGES } from "@/lib/fleet";
 import {
   getLocalBookings,
   addLocalBooking,
@@ -108,15 +108,23 @@ export async function POST(req: NextRequest) {
 
     const formattedPhone = formatIndianMobile(body.phone);
     const selectedCar = FLEET_CARS.find((c) => c.id === body.carId) || FLEET_CARS[0];
+    const selectedPackage = RENTAL_PACKAGES.find((p) => p.id === body.packageId) ||
+      (body.packageId === "multiday" ? null : RENTAL_PACKAGES.find((p) => p.id === "full-day") || RENTAL_PACKAGES[0]);
 
     // Calculate duration in days
     const pickup = new Date(body.pickupDate || Date.now());
     const dropoff = new Date(body.dropoffDate || Date.now());
-    const diffTime = Math.max(dropoff.getTime() - pickup.getTime(), 1000 * 60 * 60 * 24);
-    const calculatedDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+    const diffTime = Math.max(dropoff.getTime() - pickup.getTime(), 0);
+    const calculatedDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24))) || 1;
 
-    const chauffeurSurcharge = body.rentalType === "chauffeur" ? CHAUFFEUR_DAILY_RATE * calculatedDays : 0;
-    const totalPrice = selectedCar.pricePerDay * calculatedDays + chauffeurSurcharge;
+    // Price calculation: if package is selected, use package price; if multiday, days * pricePerDay
+    let totalPrice: number;
+    if (selectedPackage) {
+      totalPrice = selectedPackage.price;
+    } else {
+      const chauffeurSurcharge = body.rentalType === "chauffeur" ? CHAUFFEUR_DAILY_RATE * calculatedDays : 0;
+      totalPrice = selectedCar.pricePerDay * calculatedDays + chauffeurSurcharge;
+    }
 
     const bookingId = `BMW-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -129,15 +137,17 @@ export async function POST(req: NextRequest) {
       licenseNumber: body.licenseNumber?.trim() || "Not Provided",
       carId: selectedCar.id,
       carName: selectedCar.name,
+      packageId: selectedPackage ? selectedPackage.id : (body.packageId || "custom"),
+      packageName: selectedPackage ? selectedPackage.name : `Multi-Day (${calculatedDays} Days)`,
       carImage: selectedCar.image,
-      carDailyRate: selectedCar.pricePerDay,
+      carDailyRate: selectedPackage ? selectedPackage.price : selectedCar.pricePerDay,
       pickupDate: body.pickupDate || new Date().toISOString().split("T")[0],
       pickupTime: body.pickupTime || "10:00",
       dropoffDate: body.dropoffDate || new Date(Date.now() + 86400000).toISOString().split("T")[0],
       dropoffTime: body.dropoffTime || "18:00",
       pickupLocation: body.pickupLocation || "Mumbai - CSMI Airport (T2 VIP Meet & Greet)",
       dropoffLocation: body.dropoffLocation || body.pickupLocation || "Mumbai - CSMI Airport (T2 VIP Meet & Greet)",
-      rentalType: body.rentalType || "self-drive",
+      rentalType: body.rentalType || "chauffeur",
       days: calculatedDays,
       totalPrice,
       status: "pending",

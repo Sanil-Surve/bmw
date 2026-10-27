@@ -1,112 +1,114 @@
 import Link from "next/link";
-import { ShieldCheck, Phone, Mail, MapPin, LayoutDashboard } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Crown, Lock } from "lucide-react";
+import { CONTACT_INFO } from "@/lib/fleet";
 
 export function Footer() {
   return (
-    <footer className="bg-slate-50 text-slate-800 border-t border-slate-200 pt-12 sm:pt-16 pb-8 sm:pb-12">
+    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 pt-10 sm:pt-16 pb-20 sm:pb-12">
       <div className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-8 sm:mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
           {/* Column 1: Brand Info */}
           <div className="space-y-3.5 sm:space-y-4">
             <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-teal-600/30 bg-white shadow-sm">
-                <div className="relative h-4 w-4 sm:h-5 sm:w-5 rounded-full overflow-hidden border border-slate-300 grid grid-cols-2 grid-rows-2">
-                  <div className="bg-teal-600" />
-                  <div className="bg-white" />
-                  <div className="bg-white" />
-                  <div className="bg-teal-600" />
-                </div>
+              <div className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-amber-400/40 bg-slate-950 shadow-sm">
+                <Crown className="h-4 w-4 text-amber-400" />
               </div>
-              <span className="font-heading text-sm sm:text-base font-bold tracking-wider text-slate-900 uppercase">
-                KALASH <span className="text-teal-600">BMW CARS</span>
+              <span className="font-heading text-sm sm:text-base font-black tracking-wider text-white uppercase">
+                BMW 520D <span className="text-amber-400">LUXURY RENT</span>
               </span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Curated luxury Kalash BMW car rentals for discerning executives, track enthusiasts, and travelers. White-glove delivery, zero hidden fees, and pure high-performance engineering.
+            <p className="text-xs text-slate-400 leading-relaxed font-light">
+              Premium BMW 520D luxury car rentals across Mumbai and Navi Mumbai. Dedicated white-glove chauffeur service for weddings, corporate executives, T1 & T2 airport transfers, and VIP delegations.
             </p>
-            <div className="flex items-center gap-1.5 text-xs text-teal-700 font-mono font-medium">
-              <ShieldCheck className="h-4 w-4 text-teal-600" />
-              <span>Official Kalash M-Standard Fleet</span>
+            <div className="text-xs font-mono font-bold text-amber-300 tracking-wider">
+              {CONTACT_INFO.tagline}
             </div>
           </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-800">
-              Navigation
+            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-100">
+              Tariff & Navigation
             </h4>
-            <ul className="space-y-2 text-xs text-slate-600">
+            <ul className="space-y-2 text-xs text-slate-400">
               <li>
-                <a href="#fleet" className="hover:text-teal-600 transition-colors py-0.5 inline-block">
-                  The BMW Fleet
+                <a href="#pricing" className="hover:text-amber-400 transition-colors py-0.5 inline-block">
+                  Official Tariff Card
                 </a>
               </li>
               <li>
-                <a href="#experience" className="hover:text-teal-600 transition-colors py-0.5 inline-block">
-                  The Experience
+                <a href="#fleet" className="hover:text-amber-400 transition-colors py-0.5 inline-block">
+                  BMW 520D Fleet
                 </a>
               </li>
               <li>
-                <a href="#booking" className="hover:text-teal-600 transition-colors py-0.5 inline-block">
-                  Instant Booking Form
+                <a href="#booking" className="hover:text-amber-400 transition-colors py-0.5 inline-block">
+                  Reserve Vehicle
                 </a>
               </li>
               <li>
-                <a href="#faq" className="hover:text-teal-600 transition-colors py-0.5 inline-block">
+                <a href="#experience" className="hover:text-amber-400 transition-colors py-0.5 inline-block">
+                  Curbside Handover
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className="hover:text-amber-400 transition-colors py-0.5 inline-block">
                   Rental FAQ
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Contact & VIP Concierge */}
+          {/* Column 3: Contact & Booking Hotline */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-800">
-              VIP Concierge
+            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-100">
+              Contact & Booking
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-600">
+            <ul className="space-y-2.5 text-xs text-slate-300">
               <li>
-                <a href="tel:+919820154920" className="flex items-center gap-2 hover:text-teal-600 transition-colors">
-                  <Phone className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                  <span>+91 98201 54920</span>
+                <a href={CONTACT_INFO.phoneTel} className="flex items-center gap-2 hover:text-amber-400 transition-colors font-bold text-sm text-white">
+                  <Phone className="h-4 w-4 text-amber-400 shrink-0" />
+                  <span>{CONTACT_INFO.phone}</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:concierge@kalashbmw.com" className="flex items-center gap-2 hover:text-teal-600 transition-colors">
-                  <Mail className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                  <span>concierge@kalashbmw.com</span>
+                <a
+                  href={CONTACT_INFO.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-emerald-400 transition-colors text-emerald-400 font-semibold"
+                >
+                  <MessageCircle className="h-4 w-4 shrink-0" />
+                  <span>WhatsApp: {CONTACT_INFO.phone}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                <span>Executive Terminal 2, CSMI Airport, Mumbai</span>
+              <li>
+                <a href="mailto:info@kalashbmw.com" className="flex items-center gap-2 hover:text-amber-400 transition-colors text-slate-400">
+                  <Mail className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                  <span>info@kalashbmw.com</span>
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-slate-400">
+                <MapPin className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
+                <span>T1 & T2 Mumbai Airport & Navi Mumbai, Maharashtra</span>
               </li>
             </ul>
           </div>
-
-          {/* Column 4: Rental Owner Portal */}
-          <div className="space-y-2.5 sm:space-y-3 rounded-2xl bg-white p-4 sm:p-5 border border-slate-200 shadow-sm">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-teal-700 flex items-center gap-1.5">
-              <LayoutDashboard className="h-3.5 w-3.5 text-teal-600" />
-              <span>Rental Owner Portal</span>
-            </h4>
-            <p className="text-[11px] text-slate-500 leading-relaxed">
-              Review incoming bookings, track customer contacts, update approval statuses, and verify Google Sheets synchronization.
-            </p>
-            <Link
-              href="/admin"
-              className="inline-flex items-center justify-center w-full rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold py-2.5 px-3 shadow-sm transition-all"
-            >
-              Access /admin Dashboard
-            </Link>
-          </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 sm:pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-500 gap-3 text-center sm:text-left">
-          <p>© 2026 Kalash BMW Cars. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <span>BMW® and M-Power are trademarks of Bayerische Motoren Werke AG.</span>
+        {/* Bottom Bar with small Admin button at base */}
+        <div className="pt-6 sm:pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-500 gap-3 text-center sm:text-left">
+          <p>© 2026 Kalash BMW Cars • BMW 520D Luxury Rentals. All rights reserved.</p>
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap justify-center">
+            <span>BMW® is a registered trademark of Bayerische Motoren Werke AG.</span>
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-mono text-slate-500 hover:text-amber-400 border border-slate-800 hover:border-slate-700 bg-slate-950/80 px-2 py-0.5 rounded transition-colors"
+              title="Admin Portal"
+            >
+              <Lock className="h-2.5 w-2.5" />
+              <span>Admin</span>
+            </Link>
           </div>
         </div>
       </div>
